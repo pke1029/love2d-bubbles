@@ -19,6 +19,21 @@ function Gui:initialize(type)
 end
 
 
+function Gui:loadGui(path)
+	if not love.filesystem.getInfo(path) then
+        error("'"..path.."' does not exist.")
+	else
+		for i, v in ipairs(love.filesystem.getDirectoryItems(path)) do
+            if isLuaFile(v) then
+                local name = string.gsub(v, '.lua', '')
+                -- load Class
+                self[name] = require(path.."/"..name)
+            end
+        end
+	end
+end
+
+
 -- clear all gui object
 function Gui.static:removeAll()
 	Gui.static.objects = {}

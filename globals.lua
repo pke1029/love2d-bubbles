@@ -12,10 +12,6 @@ fmath = require('lib/fmath')
 
 -- load class
 Gui = require('lib/gui')
-Button = require('lib/gui/button')
-Slider = require('lib/gui/slider')
-Dropdown = require('lib/gui/dropdown')
-Checkbox = require('lib/gui/checkbox')
 Tile = require('lib/tile')
 
 -- global variables

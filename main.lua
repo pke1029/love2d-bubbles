@@ -6,6 +6,10 @@ function love.load()
 
     love.graphics.setDefaultFilter("nearest", "nearest")
     
+    -- load gui classes
+    Gui:loadGui('lib/gui')
+
+    -- load states
     state:loadState('assets/state')
     state:setState('game')
 	state:load()
