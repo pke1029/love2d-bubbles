@@ -30,4 +30,9 @@ function fmath.regPoly(n, x0, y0, r, theta)
 end
 
 
+function fmath.bool2int(x)
+	return x and 1 or 0
+end
+
+
 return fmath

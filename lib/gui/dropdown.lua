@@ -87,14 +87,14 @@ function Dropdown:mousepressed(x, y, key)
     -- lock and unlock other gui
     if self.mouseOver then
         self.isSelected = not self.isSelected
-        if self.isSelected then 
-            Gui.static.lock = self 
+        if self.isSelected then
+            self:setLock()
         else
-            Gui.static.lock = nil 
+            self:unsetLock()
         end
     else
         self.isSelected = false
-        Gui.static.lock = nil
+        self:unsetLock()
     end
 
     -- update selection

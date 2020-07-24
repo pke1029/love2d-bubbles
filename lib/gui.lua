@@ -34,6 +34,18 @@ function Gui:loadGui(path)
 end
 
 
+function Gui:setLock()
+	Gui.static.lock = self
+end
+
+
+function Gui:unsetLock()
+	if Gui.static.lock == self then
+		Gui.static.lock = nil
+	end
+end
+
+
 -- clear all gui object
 function Gui.static:removeAll()
 	Gui.static.objects = {}

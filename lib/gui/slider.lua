@@ -48,15 +48,17 @@ function Slider:draw()
 
     -- circle
     if self.isSelected then
-        love.graphics.setColor(COL[8])
-        love.graphics.circle('fill', self.bbox.x+self.r, self.bbox.y+self.r, self.r+3)
         love.graphics.setColor(COL[10])
-        love.graphics.circle('fill', self.bbox.x+self.r, self.bbox.y+self.r, self.r+1)
+        love.graphics.circle('fill', self.bbox.x+self.r, self.bbox.y+self.r, self.r+2)
+        love.graphics.setColor(COL[8])
+        love.graphics.circle('line', self.bbox.x+self.r, self.bbox.y+self.r, self.r+2)
     elseif self.mouseOver then
         love.graphics.setColor(COL[8])
-        love.graphics.circle('fill', self.bbox.x+self.r, self.bbox.y+self.r, self.r+3)
+        love.graphics.circle('fill', self.bbox.x+self.r, self.bbox.y+self.r, self.r+2)
+        love.graphics.circle('line', self.bbox.x+self.r, self.bbox.y+self.r, self.r+2)
         love.graphics.setColor(COL[10])
         love.graphics.circle('fill', self.bbox.x+self.r, self.bbox.y+self.r, self.r)
+        love.graphics.circle('line', self.bbox.x+self.r, self.bbox.y+self.r, self.r)
     else
         love.graphics.setColor(COL[10])
         love.graphics.circle('fill', self.bbox.x+self.r, self.bbox.y+self.r, self.r)
@@ -64,24 +66,26 @@ function Slider:draw()
         love.graphics.circle('line', self.bbox.x+self.r, self.bbox.y+self.r, self.r)
     end
     
-
 	-- print text
 	love.graphics.setColor(COL[1])
 	love.graphics.setFont(self.font)
     love.graphics.print(self.text, self.x, self.y)
-    love.graphics.printf(math.floor(self.val), self.x, self.y, self.trackW, 'right')
+    love.graphics.printf(string.format('%.2f', self.val), self.x, self.y, self.trackW, 'right')
+
 end
 
 
 function Slider:mousepressed(x, y, key)
     if self.mouseOver then
 		self.isSelected = true
+        self:setLock()
 	end
 end
 
 
 function Slider:mousereleased(x, y, key)
     self.isSelected = false
+    self:unsetLock()
 end
 
 

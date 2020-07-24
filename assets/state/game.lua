@@ -7,35 +7,51 @@ function game:load()
     -- initialize ball
     bubbles = {}
     addBubble(10)
+    damping = 1.2
 
     -- create button
-    b_reset = Button:new('Clear', 690, 500)
+    b_reset = Gui.button:new('Clear', 690, 500)
     b_reset.click = function() bubbles = {} end
     -- create slider
-    s_speed = Slider:new('Speed', 650, 50, 200, 0, 4)
+    s_speed = Gui.slider:new('Speed', 650, 50, 200, 0, 4)
     s_speed:send(1)
     -- create checkbox
-    o_fill = Checkbox:new('fill', 650, 250)
+    o_damping = Gui.checkbox:new('Wall damping', 650, 190)
+    o_damping:send(true)
+    -- sliderC
+    sc_grav = Gui.sliderC:new('Gravity', 650, 240)
     -- create dropdown
-    d_color = Dropdown:new(650, 150, {'blue', 'green', 'red'})
+    d_color = Gui.dropdown:new(650, 120, {'blue', 'green', 'red'})
 
 end
 
 
 function game:update(dt)
 
-    -- move
-    for i,b in ipairs(bubbles) do 
+    -- get gravity vector
+    local grav = sc_grav.val
+
+    -- equations of motion
+    for i,b in ipairs(bubbles) do
+        -- velocity
+        b.u = b.u + dt * 500 * sc_grav.val[1] 
+        b.v = b.v + dt * 500 * sc_grav.val[2] 
+        -- position
         b.x = b.x + dt * b.u * s_speed.val
         b.y = b.y + dt * b.v * s_speed.val
     end
     
     -- wall collision
+    if o_damping.val then
+        damping = 1.2
+    else
+        damping = 1
+    end
     for i,b in ipairs(bubbles) do 
-        if b.x - b.r < 0 and b.u < 0 then b.u = -b.u end
-        if b.x + b.r > 600 and b.u > 0 then b.u = -b.u end
-        if b.y - b.r < 0 and b.v < 0 then b.v = - b.v end
-        if b.y + b.r > 600 and b.v > 0 then b.v = -b.v end
+        if b.x - b.r < 0 and b.u < 0 then b.u = -b.u/damping end
+        if b.x + b.r > 600 and b.u > 0 then b.u = -b.u/damping end
+        if b.y - b.r < 0 and b.v < 0 then b.v = - b.v/damping end
+        if b.y + b.r > 600 and b.v > 0 then b.v = -b.v/damping end
     end
 
     -- bubble collision
@@ -56,11 +72,6 @@ function game:draw()
     love.graphics.setColor(COL[d_color.val])
     for i,b in ipairs(bubbles) do 
         love.graphics.circle('line', b.x, b.y, b.r)
-    end
-    if o_fill.val then 
-        for i,b in ipairs(bubbles) do 
-            love.graphics.circle('fill', b.x, b.y, b.r)
-        end
     end
 
     -- draw gui pannel
@@ -85,7 +96,11 @@ function game:mousepressed(x, y, key)
         table.insert(bubbles, b)
     end
     
-    
+end
+
+
+function game:mousereleased(x, y, key)
+    sc_grav:send({0, 0})
 end
 
 
